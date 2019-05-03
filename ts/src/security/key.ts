@@ -1,0 +1,2 @@
+const API_KEY = "AUISH654654FS65sSD#@D6DS654SA";
+export default API_KEY;

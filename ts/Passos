@@ -1,0 +1,22 @@
+mkdir ExpressAPI
+cd ExpressAPI
+yarn init -y
+
+
+yarn add typescript -s
+
+package.json -> 
+                        "scripts": {
+                            "tsc":"tsc",
+                            "dev": "nodemon --watch src/ --exec \"ts-node src/server.ts\" -e ts"
+                        }
+
+npm run tsc -- --init
+
+tsconfig.json descomente "outDir": "./"
+
+yarn add express
+yarn add @types/express
+yarn add nodemon
+yarn add ts-node
+
