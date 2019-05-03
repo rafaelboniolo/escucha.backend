@@ -1,12 +1,17 @@
-import {Schema, model} from 'mongoose'
+import {Schema, model, Document, Model} from 'mongoose'
+
+export interface iUseApi extends Document{
+    api_key  :string,
+    length   :number
+}
 
 const UseApiSchema = new Schema({
     api_key :String,
-    length   :String,
+    length   :Number,
     createdAt:{
         type:Date,
         default:Date.now()
     }
 })
 
-export default model('UseApi', UseApiSchema);
+export const UseApi: Model<iUseApi> = model<iUseApi>("UseApi", UseApiSchema)

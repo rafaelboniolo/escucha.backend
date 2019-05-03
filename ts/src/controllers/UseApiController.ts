@@ -1,6 +1,6 @@
 import iController from "./iController";
-import {Request, Response, NextFunction} from 'express'
-import UseApi from '../schemas/UseApi'
+import {Request, Response, NextFunction, Router} from 'express'
+import {iUseApi, UseApi} from '../schemas/UseApi'
 const fs = require('fs')
 const cmd = require('node-cmd')
 
@@ -30,7 +30,22 @@ class UseApiController{
     async list(req: Request, res: Response): Promise<Response> {
         const requests = await UseApi.find();
         return res.json(requests);
-    }   
+    }
+    
+    async listByUser(req: Request, res: Response): Promise<Response> {
+        const uses = await UseApi.find({"api_key":req.headers.authorization});
+        var total = 0;
+        uses.forEach((x:iUseApi) => total+= x.length);
+
+        var custo = total * 0.01;
+
+        return res.json({
+            "user":req.headers.authorization,
+            "length":total,
+            "cost": custo+"R$"
+        });
+    }
+       
 }
 
 export default new UseApiController();
