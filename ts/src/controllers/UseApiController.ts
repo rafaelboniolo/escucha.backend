@@ -12,22 +12,31 @@ class UseApiController{
         var path = JSON.stringify(req.files).split(',')[1].replace("\"path\":\"", '').replace("\"", '');
         var file = path.split("\\\\")[path.split("\\\\").length-1]
 
+
         cmd.get(
             'python '+ __dirname.split("ts")[0] + '\\py\\recognize.py '+path+' ' +file,
             async function(err:any, data:any, stderr:any){
                 if(data){
-
+                    
                     await UseApi.create({"api_key":req.headers.authorization, "length":data.length})
                     var obj = {"text":data}
                     
                     WordAnalyzerController.analyze(data).then((result)=>{
+                        cmd.get("del "+path.split("\\\\").join('\\'), ()=>{})
                         return res.json(result);
                     });
                     
                 }       
-                if(err) return res.status(500).send(err);
+                if(err) {
+                    cmd.get("del "+path.split("\\\\").join('\\'), ()=>{})
+                    return res.status(500).send(err);
+                }
                 
-                if(stderr) return res.status(500).send(stderr);
+                if(stderr){
+                    cmd.get("del "+path.split("\\\\").join('\\'), ()=>{})
+                    return res.status(500).send(stderr);
+                }
+                
                 
               }
         );
