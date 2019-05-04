@@ -1,7 +1,8 @@
 import iController from "./iController";
 import {Request, Response, NextFunction, Router} from 'express'
 import {iUseApi, UseApi} from '../schemas/UseApi'
-const fs = require('fs')
+import WordAnalyzerController from "./WordAnalyzerController";
+import { ApiKey } from "../schemas/ApiKey";
 const cmd = require('node-cmd')
 
 
@@ -12,19 +13,24 @@ class UseApiController{
         var file = path.split("\\\\")[path.split("\\\\").length-1]
 
         cmd.get(
-            'python C:\\Users\\rafae\\OneDrive\\Documentos\\GitHub\\escucha.backend\\py\\recognize.py '+path+' ' +file,
+            'python '+ __dirname.split("ts")[0] + '\\py\\recognize.py '+path+' ' +file,
             async function(err:any, data:any, stderr:any){
                 if(data){
-                    await fs.readFile('C:\\Users\\rafae\\OneDrive\\Documentos\\GitHub\\escucha.backend\\tmp\\log\\'+file.concat(".txt"),'utf8', function(err:any,data:String){
-                        UseApi.create({"api_key":req.headers.authorization, "length":data.length})
+
+                    await UseApi.create({"api_key":req.headers.authorization, "length":data.length})
+                    var obj = {"text":data}
+                    
+                    WordAnalyzerController.analyze(data).then((result)=>{
+                        return res.json(result);
                     });
-                    return res.status(200).send();
-                }
+                    
+                }       
+                if(err) return res.status(500).send(err);
                 
-                if(err || stderr) return res.status(500)
+                if(stderr) return res.status(500).send(stderr);
+                
               }
         );
-        // res.status(404).send();
     }
 
     async list(req: Request, res: Response): Promise<Response> {
@@ -32,8 +38,26 @@ class UseApiController{
         return res.json(requests);
     }
     
-    async listByUser(req: Request, res: Response): Promise<Response> {
-        const uses = await UseApi.find({"api_key":req.headers.authorization});
+    async myCost(req: Request, res: Response): Promise<Response> {
+        const uses    = await UseApi.find({"api_key":req.headers.authorization});
+        var api_key = await ApiKey.findOne({"api_key":req.headers.authorization});
+        if(!api_key)
+            api_key = new ApiKey()
+
+        var total = 0;
+        uses.forEach((x:iUseApi) => total+= x.length);
+
+        var custo = total * 0.01;
+
+        return res.json({
+            "user":api_key.username,
+            "length":total,
+            "cost": custo+"R$"
+        });
+    }
+    
+    async costByUser(req: Request, res: Response): Promise<Response> {
+        const uses = await UseApi.find({"api_key":req.body.api_key});
         var total = 0;
         uses.forEach((x:iUseApi) => total+= x.length);
 
@@ -45,6 +69,8 @@ class UseApiController{
             "cost": custo+"R$"
         });
     }
+    
+    
        
 }
 

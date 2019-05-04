@@ -1,16 +1,18 @@
 import { Router } from 'express';
-import RequestMonitorController from './controllers/RequestMonitorController';
 import UseApiController from './controllers/UseApiController';
+import WordAnalyzerController from './controllers/WordAnalyzerController';
+import ApiKeyController from './controllers/ApiKeyController';
 
 const routes = Router();
 
 
-
-routes.get("/monitor", RequestMonitorController.list)
+// routes.post("/word", WordAnalyzerController.create)
 
 routes.get('/list', UseApiController.list)
-routes.get('/list2', UseApiController.listByUser)
+routes.get('/listme', UseApiController.myCost)
+
 routes.post("/upload", UseApiController.create)
 
+routes.post('/registerkey', ApiKeyController.create)
 export default routes;
 
