@@ -4,6 +4,7 @@ import {iUseApi, UseApi} from '../schemas/UseApi'
 import WordAnalyzerController from "./WordAnalyzerController";
 import { ApiKey } from "../schemas/ApiKey";
 const cmd = require('node-cmd')
+import _path from 'path'
 
 
 class UseApiController{
@@ -14,10 +15,10 @@ class UseApiController{
 
 
         cmd.get(
-            'python '+ __dirname.split("ts")[0] + '\\py\\recognize.py '+path+' ' +file,
+            'python '+ __dirname.split("\\ts")[0] + _path.sep+'py'+_path.sep+'recognize.py '+path+' ' +file,
             async function(err:any, data:any, stderr:any){
                 if(data){
-                    
+                    console.log(data)
                     await UseApi.create({"api_key":req.headers.authorization, "length":data.length})
                     var obj = {"text":data}
                     
