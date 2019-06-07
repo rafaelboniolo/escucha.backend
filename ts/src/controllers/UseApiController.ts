@@ -5,42 +5,13 @@ import WordAnalyzerController from "./WordAnalyzerController";
 import { ApiKey } from "../schemas/ApiKey";
 const cmd = require('node-cmd')
 import _path from 'path'
+import PythonMethods from "./PythonMethods";
 
 
 class UseApiController{
     
-    async create(req: Request, res: Response){
-        var path = JSON.stringify(req.files).split(',')[1].replace("\"path\":\"", '').replace("\"", '');
-        var file = path.split("\\\\")[path.split("\\\\").length-1]
-
-
-        cmd.get(
-            'python '+ __dirname.split("\\ts")[0] + _path.sep+'py'+_path.sep+'recognize.py '+path+' ' +file,
-            async function(err:any, data:any, stderr:any){
-                if(data){
-                    console.log(data)
-                    await UseApi.create({"api_key":req.headers.authorization, "length":data.length})
-                    var obj = {"text":data}
-                    
-                    WordAnalyzerController.analyze(data).then((result)=>{
-                        cmd.get("del "+path.split("\\\\").join('\\'), ()=>{})
-                        return res.json(result);
-                    });
-                    
-                }       
-                if(err) {
-                    cmd.get("del "+path.split("\\\\").join('\\'), ()=>{})
-                    return res.status(500).send(err);
-                }
-                
-                if(stderr){
-                    cmd.get("del "+path.split("\\\\").join('\\'), ()=>{})
-                    return res.status(500).send(stderr);
-                }
-                
-                
-              }
-        );
+    async create(api_key, length){
+        await UseApi.create({"api_key":api_key, "length":length})
     }
 
     async list(req: Request, res: Response): Promise<Response> {
