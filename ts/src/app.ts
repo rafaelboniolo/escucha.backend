@@ -6,6 +6,7 @@ import mongodb from './database/mongoConfig'
 import Auth from './security/Auth'
 import path from 'path'
 import cors from 'cors'
+import PathBuilder from "./controllers/PathBuillder";
 
 class App{
     public express: express.Application;
@@ -24,7 +25,7 @@ class App{
         this.express.use(cors());
         this.express.use(formidable({
             encoding: 'utf-8',
-            uploadDir:  __dirname.split("\\ts")[0] +path.sep+'ts'+path.sep+'tmp'+path.sep+'files',
+            uploadDir:  PathBuilder.buildUploadDir(__dirname),
             multiples: true,
           } ))
     }

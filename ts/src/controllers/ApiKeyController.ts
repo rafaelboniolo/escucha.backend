@@ -22,6 +22,11 @@ class ApiKeyController{
         return api_key;
     }
 
+    async show(req:Request, res:Response):Promise<Response>{
+        const api_key = await ApiKey.find()
+        return res.send(api_key);
+    }
+
 }
 
 export default new ApiKeyController();

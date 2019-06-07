@@ -1,7 +1,6 @@
 import {Request, Response, NextFunction, Router} from 'express'
 import {iUseApi, UseApi} from '../schemas/UseApi'
 import { ApiKey } from "../schemas/ApiKey";
-const cmd = require('node-cmd')
 import _path from 'path'
 
 
@@ -17,8 +16,9 @@ class UseApiController{
     }
     
     async myCost(req: Request, res: Response): Promise<Response> {
-        const uses    = await UseApi.find({"api_key":req.headers.authorization});
+        const uses  = await UseApi.find({"api_key":req.headers.authorization});
         var api_key = await ApiKey.findOne({"api_key":req.headers.authorization});
+
         if(!api_key)
             api_key = new ApiKey()
 
@@ -28,9 +28,9 @@ class UseApiController{
         var custo = total * 0.01;
 
         return res.json({
-            "user":api_key.username,
+            "user"  :api_key.username,
             "length":total,
-            "cost": custo+"R$"
+            "cost"  :custo+"R$"
         });
     }
     
