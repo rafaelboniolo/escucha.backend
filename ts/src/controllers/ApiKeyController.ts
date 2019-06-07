@@ -3,7 +3,7 @@ import {ApiKey, iApiKey} from '../schemas/ApiKey'
 
 class ApiKeyController{
 
-    async create(req: Request, res: Response){
+    async create(req: Request, res: Response):Promise<Response>{
         const key = await ApiKey.create(
             {
                 "api_key":new Buffer(req.body.username).toString('base64'),

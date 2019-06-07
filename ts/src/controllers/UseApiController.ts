@@ -1,16 +1,13 @@
-import iController from "./iController";
 import {Request, Response, NextFunction, Router} from 'express'
 import {iUseApi, UseApi} from '../schemas/UseApi'
-import WordAnalyzerController from "./WordAnalyzerController";
 import { ApiKey } from "../schemas/ApiKey";
 const cmd = require('node-cmd')
 import _path from 'path'
-import PythonMethods from "./PythonMethods";
 
 
 class UseApiController{
     
-    async create(api_key, length){
+    async create(api_key:string, length:Number){
         await UseApi.create({"api_key":api_key, "length":length})
     }
 
