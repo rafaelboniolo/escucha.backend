@@ -5,6 +5,7 @@ import formidable from 'express-formidable'
 import mongodb from './database/mongoConfig'
 import Auth from './security/Auth'
 import path from 'path'
+import cors from 'cors'
 
 class App{
     public express: express.Application;
@@ -20,6 +21,7 @@ class App{
     private middlewares():void{
         this.express.use(express.json());
         // this.express.use(Auth.authenticate)
+        this.express.use(cors());
         this.express.use(formidable({
             encoding: 'utf-8',
             uploadDir:  __dirname.split("\\ts")[0] +path.sep+'ts'+path.sep+'tmp'+path.sep+'files',
