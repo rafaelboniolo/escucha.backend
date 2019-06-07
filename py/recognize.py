@@ -9,8 +9,8 @@ try:
     # FILE = sys.argv[2]
     AUDIO_FILE = sys.argv[1]
 except IndexError: 
-	print("Invalid Params");
-        exit();
+	print("Invalid Params")
+   
 
 r = sr.Recognizer() 
 with sr.AudioFile(AUDIO_FILE) as source:

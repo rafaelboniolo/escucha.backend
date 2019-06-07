@@ -13,6 +13,7 @@ class UseApiController{
         var path = JSON.stringify(req.files).split(',')[1].replace("\"path\":\"", '').replace("\"", '');
         var file = path.split("\\\\")[path.split("\\\\").length-1]
 
+        
 
         cmd.get(
             'python '+ __dirname.split("\\ts")[0] + _path.sep+'py'+_path.sep+'recognize.py '+path+' ' +file,
