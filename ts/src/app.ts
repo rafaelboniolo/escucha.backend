@@ -20,9 +20,9 @@ class App{
     }
 
     private middlewares():void{
+        this.express.use(cors());
         this.express.use(express.json());
         // this.express.use(Auth.authenticate)
-        this.express.use(cors());
         this.express.use(formidable({
             encoding: 'utf-8',
             uploadDir:  PathBuilder.buildUploadDir(__dirname),
