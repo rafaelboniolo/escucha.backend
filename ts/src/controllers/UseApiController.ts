@@ -1,5 +1,5 @@
-import {Request, Response, NextFunction, Router} from 'express'
-import {iUseApi, UseApi} from '../schemas/UseApi'
+import { Request, Response} from 'express'
+import { iUseApi, UseApi } from '../schemas/UseApi'
 import { ApiKey } from "../schemas/ApiKey";
 import _path from 'path'
 
@@ -16,6 +16,8 @@ class UseApiController{
     }
     
     async myCost(req: Request, res: Response): Promise<Response> {
+
+        
         const uses  = await UseApi.find({"api_key":req.headers.authorization});
         var api_key = await ApiKey.findOne({"api_key":req.headers.authorization});
 
@@ -25,12 +27,12 @@ class UseApiController{
         var total = 0;
         uses.forEach((x:iUseApi) => total+= x.length);
 
-        var custo = total * 0.01;
+        var custo = total * 0.02;
 
         return res.json({
             "user"  :api_key.username,
             "length":total,
-            "cost"  :custo+"R$"
+            "cost"  :custo
         });
     }
     
@@ -46,10 +48,7 @@ class UseApiController{
             "length":total,
             "cost": custo+"R$"
         });
-    }
-    
-    
-       
+    }      
 }
 
 export default new UseApiController();
