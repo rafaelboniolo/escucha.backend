@@ -1,11 +1,19 @@
 import {Schema, model, Document, Model} from 'mongoose'
 
 export interface iWordAnalyzer extends Document{
-    word  :string,
+    category:{
+        name:String,
+        words: [string]
+    }
 }
 
+
 const WordAnalyzerSchema = new Schema({
-    word :String,
+    
+    category:{
+        name:String,
+        words: [String]
+    },
     createdAt:{
         type:Date,
         default:Date.now()
