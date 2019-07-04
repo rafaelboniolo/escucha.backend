@@ -7,15 +7,13 @@ import RecognizeWrappper from './controllers/RecognizeWrapper';
 const routes:Router = Router();
 
 
-
 routes.get('/list', UseApiController.list)
-routes.get('/listme', UseApiController.myCost)
+routes.get('/mycost', UseApiController.myCost)
 
 routes.post("/upload", RecognizeWrappper.exec)
 
-routes.post('/registerkey', ApiKeyController.create)
-routes.post('/showkey', ApiKeyController.show)
+// routes.post('/registerkey', ApiKeyController.create)
+// routes.post('/showkey', ApiKeyController.show)
 
 
 export default routes;
-
